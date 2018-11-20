@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 
@@ -40,6 +41,7 @@ class GameSurface(context: Context, attributeSet: AttributeSet) : View( context,
     fun drawGame(gameData: GameData) {
         pieces = gameData.pieces
         invalidate()
+        Log.d("tagor", "drawGame")
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -82,10 +84,12 @@ class GameSurface(context: Context, attributeSet: AttributeSet) : View( context,
     }
 
     fun drawPiece(canvas: Canvas?, piece:ChessPiece) {
+        Log.d("tagor", "drawPiece")
         var vectorPiece: VectorDrawableCompat? = VectorDrawableCompat.create(getContext().getResources(), piece.resource, null);
         var dim: Int = width/8
 
-        vectorPiece?.setBounds(piece.position.x * dim  , piece.position.y * dim, dim, dim)
+        vectorPiece?.setBounds(piece.position.x * dim  , piece.position.y * dim,
+            (piece.position.x + 1) * dim, (piece.position.y + 1) * dim)
         vectorPiece?.draw(canvas)
     }
 

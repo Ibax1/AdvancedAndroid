@@ -10,28 +10,28 @@ class Position(var position: Pair<Char, Char>) {
 
 
     val y: Int
-    get() = position.second.toInt() - 48
+    get() = position.second.toInt() - 49
 }
 
 class ChessPiece(val side: Side, val type: PieceType, var position: Position) {
 
     val resource: Int = when(this.side) {
         Side.white -> when(this.type) {
-            PieceType.king -> 0
-            PieceType.queen -> 0
-            PieceType.bishop -> 0
-            PieceType.knight -> 0
-            PieceType.rook -> 0
-            PieceType.pawn -> 0
+            PieceType.king -> R.drawable.white_king
+            PieceType.queen -> R.drawable.white_queen
+            PieceType.bishop -> R.drawable.white_bishop
+            PieceType.knight -> R.drawable.white_knight
+            PieceType.rook -> R.drawable.white_rook
+            PieceType.pawn -> R.drawable.white_pawn
         }
 
         Side.black -> when(this.type) {
-            PieceType.king -> 0
-            PieceType.queen -> 0
-            PieceType.bishop -> 0
-            PieceType.knight -> 0
-            PieceType.rook -> 0
-            PieceType.pawn -> 0
+            PieceType.king -> R.drawable.black_king
+            PieceType.queen -> R.drawable.black_queen
+            PieceType.bishop -> R.drawable.black_bishop
+            PieceType.knight -> R.drawable.black_knight
+            PieceType.rook -> R.drawable.black_rook
+            PieceType.pawn -> R.drawable.black_pawn
         }
     }
 
