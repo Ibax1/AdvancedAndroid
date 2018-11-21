@@ -56,17 +56,6 @@ class GameSurface(context: Context, attributeSet: AttributeSet) : View( context,
         var vectorBoard = VectorDrawableCompat.create(getContext().getResources(), R.drawable.chess_board, null);
         vectorBoard?.setBounds(0, 0, width, width)
         vectorBoard?.draw(canvas)
-//        canvas?.drawRect(Rect(0, 0, width, width), if (!flipped) black else white)
-//
-//        val dim: Int = width/8
-//        for(i in 0..7) {
-//            for (j in 0..7) {
-//                if((i*7 + j) % 2 == 0) {
-//                    canvas?.drawRect(Rect(j * dim, i * dim, (j+1) * dim, (i+1) * dim),
-//                        if( !flipped) white else black)
-//                }
-//            }
-//        }
     }
 
     fun drawPrevStepMark(canvas: Canvas?) {
@@ -85,11 +74,13 @@ class GameSurface(context: Context, attributeSet: AttributeSet) : View( context,
 
     fun drawPiece(canvas: Canvas?, piece:ChessPiece) {
         Log.d("tagor", "drawPiece")
-        var vectorPiece: VectorDrawableCompat? = VectorDrawableCompat.create(getContext().getResources(), piece.resource, null);
+        var vectorPiece: VectorDrawableCompat? = VectorDrawableCompat.create(getContext().getResources(),
+                piece.resource, null);
         var dim: Int = width/8
 
-        vectorPiece?.setBounds(piece.position.x * dim  , piece.position.y * dim,
-            (piece.position.x + 1) * dim, (piece.position.y + 1) * dim)
+        vectorPiece?.setBounds(piece.position.getLeft(dim)  , piece.position.getTop(dim),
+            piece.position.getRight(dim), piece.position.getBottom(dim))
+
         vectorPiece?.draw(canvas)
     }
 
