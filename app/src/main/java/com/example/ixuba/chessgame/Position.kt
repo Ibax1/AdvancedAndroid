@@ -15,11 +15,19 @@ class Position(var x: Int, var y: Int) {
 
     constructor(xyString: String) : this(xyString[0], xyString[1])
 
-    constructor(dim: Int, xFloat: Float, yFloat: Float) : this(7 - (xFloat / dim.toFloat()).toInt(),
+    constructor(dim: Int, xFloat: Float, yFloat: Float) : this((xFloat / dim.toFloat()).toInt(),
         7 - (yFloat / dim.toFloat()).toInt())
 
     override fun toString(): String {
         return (x + 97).toChar().toString() + (y + 49).toChar()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is Position && this.x == other.x && this.y == other.y) {
+            return true
+        }
+
+        return false
     }
 
     fun getLeft(dim: Int) : Int {

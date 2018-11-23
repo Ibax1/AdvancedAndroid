@@ -21,8 +21,6 @@ class ChessPiece(val side: Side, val type: PieceType, var position: Position) {
             PieceType.pawn -> R.drawable.black_pawn
         }
     }
-
-
 }
 
 fun getDefaultPieces(): ArrayList<ChessPiece> {

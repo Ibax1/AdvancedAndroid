@@ -4,13 +4,19 @@ import android.graphics.Canvas
 
 class GamePresenter(var gameView: GameView) {
 
+    var gameData: GameData = GameData()
 
     fun gameStarted() {
-        val gameData: GameData = GameData()
-        gameView.showGame(gameData)
+        gameView.showGame(GameShowData(this.gameData, Side.white))
     }
 
-    fun stepMade(gameData: GameData) {
+    fun onGameSurfaceActionDown(position: Position) {
 
     }
+
+    fun onGameSurfaceActionUp(position: Position) {
+
+    }
+
+
 }

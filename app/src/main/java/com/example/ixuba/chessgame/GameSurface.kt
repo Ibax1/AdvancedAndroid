@@ -13,33 +13,43 @@ import android.view.View
 
 class GameSurface(context: Context, attributeSet: AttributeSet) : View( context, attributeSet) {
 
-    private val white: Paint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.white)
-    }
-    private val black: Paint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.black)
-    }
-    private val red: Paint = Paint().apply {
-        color = Color.RED
-    }
+    private var listener:OnGameSurfaceEventListener? = null
+    //private var pieces: ArrayList<ChessPiece> = ArrayList<ChessPiece>()
+    private var gameShowData: GameShowData? = null
 
-    private var xCoordinate = -1f
-    private var yCoordinate = -1f
-
-    private var pieces: ArrayList<ChessPiece> = ArrayList<ChessPiece>()
-
+    fun setOnGameSurfaceEventListener(listener: OnGameSurfaceEventListener) {
+        this.listener = listener
+    }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if(event?.action == MotionEvent.ACTION_UP) {
-            xCoordinate = event.x
-            yCoordinate = event.y
-            invalidate()
+
+        if(event == null) {
+            return true
         }
+
+        val position: Position = Position(width / 8, event.x, event.y)
+
+        when(event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                Log.d("onTouchTag", "User started to touch board - DOWN: ${position.toString()}")
+                listener?.onGameSurfaceActionDown(position)
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+
+            }
+
+            MotionEvent.ACTION_UP -> {
+                Log.d("onTouchTag", "User stopped to touch board - UP: ${position.toString()}")
+                listener?.onGameSurfaceActionUp(position)
+            }
+        }
+
         return true
     }
 
-    fun drawGame(gameData: GameData) {
-        pieces = gameData.pieces
+    fun drawGame(gameShowData: GameShowData) {
+        this.gameShowData = gameShowData
         invalidate()
         Log.d("tagor", "drawGame")
     }
@@ -48,8 +58,8 @@ class GameSurface(context: Context, attributeSet: AttributeSet) : View( context,
         super.onDraw(canvas)
         drawBoard(canvas)
         drawPrevStepMark(canvas)
-        drawPossibleSteps(canvas)
         drawPieces(canvas)
+        drawPossibleSteps(canvas)
     }
 
     fun drawBoard(canvas: Canvas?, flipped: Boolean = false) {
@@ -59,31 +69,32 @@ class GameSurface(context: Context, attributeSet: AttributeSet) : View( context,
     }
 
     fun drawPrevStepMark(canvas: Canvas?) {
-
-    }
-
-    fun drawPossibleSteps(canvas: Canvas?) {
-
-    }
-
-    fun drawPieces(canvas: Canvas?) {
-        for(piece in pieces) {
-            drawPiece(canvas, piece)
+        if(gameShowData?.gameData?.story != null && gameShowData?.gameData?.story!!.size > 0) {
+            drawVectorAtPosition(canvas, gameShowData?.gameData?.story?.last()!!.first, R.drawable.prev_step_from)
+            drawVectorAtPosition(canvas, gameShowData?.gameData?.story?.last()!!.second, R.drawable.prev_step_to)
         }
     }
 
-    fun drawPiece(canvas: Canvas?, piece:ChessPiece) {
-        Log.d("tagor", "drawPiece")
-        var vectorPiece: VectorDrawableCompat? = VectorDrawableCompat.create(getContext().getResources(),
-                piece.resource, null);
-        var dim: Int = width/8
+    fun drawPieces(canvas: Canvas?) {
+        for (piece in gameShowData?.gameData!!.pieces) {
+            drawVectorAtPosition(canvas, piece.position, piece.resource)
+        }
+    }
 
-        vectorPiece?.setBounds(piece.position.getLeft(dim)  , piece.position.getTop(dim),
-            piece.position.getRight(dim), piece.position.getBottom(dim))
+    fun drawPossibleSteps(canvas: Canvas?) {
+        for(posStep in gameShowData!!.possibleSteps) {
+            drawVectorAtPosition(canvas, posStep, R.drawable.possible_step)
+        }
+    }
+
+    fun drawVectorAtPosition(canvas: Canvas?, position: Position, resource: Int) {
+        var vectorPiece: VectorDrawableCompat? = VectorDrawableCompat.create(getContext().getResources(),
+            resource, null);
+        var dim: Int = width/8
+        vectorPiece?.setBounds(position.getLeft(dim)  , position.getTop(dim),
+            position.getRight(dim), position.getBottom(dim))
 
         vectorPiece?.draw(canvas)
     }
-
-
 
 }

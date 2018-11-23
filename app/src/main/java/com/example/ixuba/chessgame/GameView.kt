@@ -1,6 +1,5 @@
 package com.example.ixuba.chessgame
 
 interface GameView {
-    fun showGame(gameData: GameData)
-
+    fun showGame(showData: GameShowData)
 }
