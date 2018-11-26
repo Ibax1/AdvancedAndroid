@@ -1,20 +1,21 @@
-package com.example.ixuba.chessgame
+package com.example.ixuba.chessgame.Game.GameSurface
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.support.graphics.drawable.VectorDrawableCompat
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import com.example.ixuba.chessgame.Data.Direction
+import com.example.ixuba.chessgame.Data.GameShowData
+import com.example.ixuba.chessgame.Data.Position
+import com.example.ixuba.chessgame.R
 
 class GameSurface(context: Context, attributeSet: AttributeSet) : View( context, attributeSet) {
 
-    private var listener:OnGameSurfaceEventListener? = null
-    //private var pieces: ArrayList<ChessPiece> = ArrayList<ChessPiece>()
+    private var listener: OnGameSurfaceEventListener? = null
+    //private var pieces: ArrayList<Piece> = ArrayList<Piece>()
     private var gameShowData: GameShowData? = null
 
     fun setOnGameSurfaceEventListener(listener: OnGameSurfaceEventListener) {
@@ -27,7 +28,8 @@ class GameSurface(context: Context, attributeSet: AttributeSet) : View( context,
             return true
         }
 
-        val position: Position = Position(width / 8, event.x, event.y)
+        val position: Position =
+            Position(width / 8, event.x, event.y)
 
         when(event.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -63,15 +65,20 @@ class GameSurface(context: Context, attributeSet: AttributeSet) : View( context,
     }
 
     fun drawBoard(canvas: Canvas?, flipped: Boolean = false) {
-        var vectorBoard = VectorDrawableCompat.create(getContext().getResources(), R.drawable.chess_board, null);
+        var vectorBoard = VectorDrawableCompat.create(getContext().getResources(),
+            R.drawable.chess_board, null);
         vectorBoard?.setBounds(0, 0, width, width)
         vectorBoard?.draw(canvas)
     }
 
     fun drawPrevStepMark(canvas: Canvas?) {
         if(gameShowData?.gameData?.story != null && gameShowData?.gameData?.story!!.size > 0) {
-            drawVectorAtPosition(canvas, gameShowData?.gameData?.story?.last()!!.first, R.drawable.prev_step_from)
-            drawVectorAtPosition(canvas, gameShowData?.gameData?.story?.last()!!.second, R.drawable.prev_step_to)
+            drawVectorAtPosition(canvas, gameShowData?.gameData?.story?.last()!!.from,
+                R.drawable.prev_step_from
+            )
+            drawVectorAtPosition(canvas, gameShowData?.gameData?.story?.last()!!.to,
+                R.drawable.prev_step_to
+            )
         }
     }
 
@@ -85,14 +92,15 @@ class GameSurface(context: Context, attributeSet: AttributeSet) : View( context,
         for(posStep in gameShowData!!.possibleSteps) {
             drawVectorAtPosition(canvas, posStep, R.drawable.possible_step)
         }
+        //drawVectorAtPosition(canvas, Position(3,3), R.drawable.possible_step)
     }
 
     fun drawVectorAtPosition(canvas: Canvas?, position: Position, resource: Int) {
         var vectorPiece: VectorDrawableCompat? = VectorDrawableCompat.create(getContext().getResources(),
             resource, null);
         var dim: Int = width/8
-        vectorPiece?.setBounds(position.getLeft(dim)  , position.getTop(dim),
-            position.getRight(dim), position.getBottom(dim))
+        vectorPiece?.setBounds(position.getSide(dim, Direction.W)  , position.getSide(dim, Direction.N),
+            position.getSide(dim, Direction.E), position.getSide(dim, Direction.S))
 
         vectorPiece?.draw(canvas)
     }

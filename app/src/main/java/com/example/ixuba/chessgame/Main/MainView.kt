@@ -1,4 +1,4 @@
-package com.example.ixuba.chessgame
+package com.example.ixuba.chessgame.Main
 
 interface MainView{
     fun startNewGame()

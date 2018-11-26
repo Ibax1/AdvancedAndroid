@@ -1,13 +1,19 @@
-package com.example.ixuba.chessgame
+package com.example.ixuba.chessgame.Game
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.example.ixuba.chessgame.*
+import com.example.ixuba.chessgame.Data.*
+import com.example.ixuba.chessgame.Game.GamePresenters.GamePresenter
+import com.example.ixuba.chessgame.Game.GameSurface.OnGameSurfaceEventListener
 import kotlinx.android.synthetic.main.activity_game.*
 
 
-class GameActivity : AppCompatActivity(), GameView, OnGameSurfaceEventListener {
+class GameActivity : AppCompatActivity(), GameContract,
+    OnGameSurfaceEventListener {
 
-    val presenter: GamePresenter = GamePresenter(this)
+    val presenter: GamePresenter =
+        GamePresenter(this)
     var gameShowData: GameShowData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
